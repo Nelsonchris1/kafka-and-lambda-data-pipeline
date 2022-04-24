@@ -5,13 +5,13 @@
         "Sid": "ListObjectsInBucket",
         "Effect": "Allow",
         "Action": ["s3:ListBucket"],
-        "Resource": ["arn:aws:s3:::customer-practice"]
+        "Resource": ["arn:aws:s3:::confluent-customer-orders"]
     },
     {
         "Sid": "AllObjectActions",
         "Effect": "Allow",
         "Action": "s3:*Object",
-        "Resource": ["arn:aws:s3:::customer-practice/*"]
+        "Resource": ["arn:aws:s3:::confluent-customer-orders/*"]
     },
       {
         "Sid": "Stmt1650277225758",

@@ -1,0 +1,5 @@
+input_file_name,Data_length,timestamp,output_file_name
+customer_input_00011111,1000,Sun Apr 24 18:42:24 UTC 2022,customer_01.csv
+customer-orders+0+0000000000,1000,Sun Apr 24 18:43:03 UTC 2022,customer_01.csv
+customer-orders+0+0000000000,1000,Sun Apr 24 21:25:23 UTC 2022,customer_file5366.csv
+customer-orders+0+0000000000.json,1000,Sun Apr 24 22:11:55 UTC 2022,customer_file4371.csv

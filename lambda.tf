@@ -4,17 +4,17 @@ locals {
 
 data "archive_file" "init" {
   type        = "zip"
-  source_file = "welcome.py"
+  source_file = "order-transform.py"
   output_path = local.lambda-zip-location
 }
 
-resource "aws_lambda_function" "test_lambda" {
+resource "aws_lambda_function" "cus_lambda" {
   # If the file is not in the current working directory you will need to include a 
   # path.module in the filename.
   filename      = local.lambda-zip-location
-  function_name = "welcome"
+  function_name = "order-transform"
   role          = aws_iam_role.lambda_role.arn
-  handler       = "welcome.hello" 
+  handler       = "order-transform.process_orders" 
 
   # The filebase64sha256() function is available in Terraform 0.11.12 and later
   # For Terraform 0.11.11 and earlier, use the base64sha256() function and the file() function:
@@ -24,16 +24,21 @@ resource "aws_lambda_function" "test_lambda" {
   runtime = "python3.9"
 }
 
-resource "aws_cloudwatch_event_rule" "customer-trigger" {
-    name = "customer-trigger"
-    description = "Fires every five minutes"
+resource "aws_cloudwatch_event_rule" "customer-trigger-lambda" {
+    name = "customer-trigger-lambda"
+    description = "Based On an event"
     event_pattern  = <<EOF
 {
   "source": ["aws.s3"],
   "detail-type": ["Object Created"],
   "detail": {
     "bucket": {
-      "name": ["customer-practice"]
+      "name": ["confluent-customer-orders"]
+    },
+    "object": {
+      "key":[{
+        "prefix":"topics/customer-orders/year=2022/month=04/day=20"
+      }]
     }
   }
 }
@@ -41,17 +46,17 @@ EOF
 }
 
 resource "aws_cloudwatch_event_target" "customer-trigger-target"{
-    rule = "${aws_cloudwatch_event_rule.customer-trigger.name}"
-    target_id = "test_lambda"
-    arn = "${aws_lambda_function.test_lambda.arn}"
+    rule = "${aws_cloudwatch_event_rule.customer-trigger-lambda.name}"
+    target_id = "cus_lambda"
+    arn = "${aws_lambda_function.cus_lambda.arn}"
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch_to_call_test_lambda" {
     statement_id = "AllowExecutionFromCloudWatch"
     action = "lambda:InvokeFunction"
-    function_name = "${aws_lambda_function.test_lambda.function_name}"
+    function_name = "${aws_lambda_function.cus_lambda.function_name}"
     principal = "events.amazonaws.com"
-    source_arn = "${aws_cloudwatch_event_rule.customer-trigger.arn}"
+    source_arn = "${aws_cloudwatch_event_rule.customer-trigger-lambda.arn}"
 }
 
 # # Lambda layer
