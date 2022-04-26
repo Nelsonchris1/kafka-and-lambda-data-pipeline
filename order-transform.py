@@ -4,6 +4,7 @@ import datetime
 import json
 import random 
 import os
+import awswrangler as wr
 
 #Next add bucket path for s3_upload
 
@@ -37,8 +38,9 @@ def process_orders(event, context):
     data = [json.loads(line) for line in open(s3_buc, 'r')]
     data_length, order_df = clean_data(data)
     records_per_run(file_name=file_name, data_length=data_length, output_name=output_name)
-    output_path = 's3://confluent-customer-orders/landing/' + output_name
-    order_df.to_csv(output_path, index=False)
+    output_path = 's3://confluent-customer-orders/landing/' + output_name + '.csv'
+    # order_df.to_csv(output_path, index=False)
+    wr.s3.to_csv(df=order_df, path=output_path)
     print("Done")
 
 process_orders(None, None)
