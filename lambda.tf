@@ -4,8 +4,16 @@ locals {
 
 data "archive_file" "init" {
   type        = "zip"
-  source_file = "order-transform.py"
   output_path = local.lambda-zip-location
+  source_dir = "scripts"
+
+  #source_file = "order-transform.py"
+}
+
+data "archive_file" "record" {
+  type = "zip"
+  output_path = local.lambda-zip-location
+  source_file = "record_run.py"
 }
 
 resource "aws_lambda_function" "cus_lambda" {

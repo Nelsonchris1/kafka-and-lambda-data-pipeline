@@ -10,7 +10,3 @@ def records_per_run(file_name, data_length, output_name):
                  'output_file_name': output_name}
     new_record = record_run.append(data_run, ignore_index=True)
     new_record.to_csv(path, index=False)
-
-
-
-
