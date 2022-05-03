@@ -10,11 +10,11 @@ data "archive_file" "init" {
   #source_file = "order-transform.py"
 }
 
-data "archive_file" "record" {
-  type = "zip"
-  output_path = local.lambda-zip-location
-  source_file = "record_run.py"
-}
+# data "archive_file" "record" {
+#   type = "zip"
+#   output_path = local.lambda-zip-location
+#   source_file = "record_run.py"
+# }
 
 resource "aws_lambda_function" "cus_lambda" {
   # If the file is not in the current working directory you will need to include a 
@@ -30,6 +30,8 @@ resource "aws_lambda_function" "cus_lambda" {
   #source_code_hash = filebase64sha256(local.lambda-zip-location)
 
   runtime = "python3.9"
+
+
 }
 
 resource "aws_cloudwatch_event_rule" "customer-trigger-lambda" {
@@ -45,7 +47,7 @@ resource "aws_cloudwatch_event_rule" "customer-trigger-lambda" {
     },
     "object": {
       "key":[{
-        "prefix":"topics/customer-orders/year=2022/month=04/day=20"
+        "prefix":"topics/customer-orders/year=2022"
       }]
     }
   }

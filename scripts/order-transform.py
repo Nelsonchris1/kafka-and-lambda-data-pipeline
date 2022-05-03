@@ -16,10 +16,10 @@ def s3_file_name(key):
     return file_name
 
 def clean_data(data):
-    """
-    Normalize table and extract datetime features,
-    drop unneccesary column and fix column names
-    """
+
+    #Normalize table and extract datetime features,
+    #drop unneccesary column and fix column names
+    
 
     order_df = pd.json_normalize(data)
     columns = ['itemid', 'orderid', 'orderunits', 
