@@ -17,3 +17,8 @@ I used terraform , an open source Iac (Infrastructure as a code) service to crea
 4. Eventbridge
 5. python
 6. Terraform
+
+
+## Result
+1. This image shows the connectors Datagen(Source connector) and S3Connector(Sink Connector) as well as the the messages being consumed by kafka 
+![source and sink](images/kafka-monitor.PNG)
